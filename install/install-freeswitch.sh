@@ -105,10 +105,11 @@ func_install_fs_sources() {
     cd $FS_BASE_PATH
     rm -rf freeswitch
     # dont use depth :  --depth=1 as we wont be able to checkout
-    git clone git://git.freeswitch.org/freeswitch.git
+    #git clone git://git.freeswitch.org/freeswitch.git
+    mkdir -p $FS_BASE_PATH/freeswitch
     cd $FS_BASE_PATH/freeswitch
-    git checkout $FS_VERSION
-
+    wget http://www.kazoo.com.cn/freeswitch/freeswitch.tar.gz
+    tar -xvzf freeswitch.tar.gz
     ./bootstrap.sh
 
     # !!! virtual memory exhausted: Cannot allocate memory !!!
