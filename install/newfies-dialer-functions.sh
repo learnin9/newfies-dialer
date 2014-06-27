@@ -32,9 +32,12 @@ CONFIG_DIR='/usr/share/newfies/newfies_dialer/'
 LUA_DIR='/usr/share/newfies-lua'
 WELCOME_DIR='/var/www/newfies'
 DATABASENAME='newfies_dialer_db'
-DB_USERSALT=`</dev/urandom tr -dc 0-9| (head -c $1 > /dev/null 2>&1 || head -c 5)`
-DB_USERNAME="newfies_dialer_$DB_USERSALT"
-DB_PASSWORD=`</dev/urandom tr -dc A-Za-z0-9| (head -c $1 > /dev/null 2>&1 || head -c 20)`
+#DB_USERSALT=`</dev/urandom tr -dc 0-9| (head -c $1 > /dev/null 2>&1 || head -c 5)`
+#DB_USERNAME="newfies_dialer_$DB_USERSALT"
+#DB_PASSWORD=`</dev/urandom tr -dc A-Za-z0-9| (head -c $1 > /dev/null 2>&1 || head -c 20)`
+DB_USERSALT='clowork'
+DB_USERNAME='$DB_USERSALT_2014'
+DB_PASSWORD='clowork_2014'
 DB_HOSTNAME='localhost'
 DB_PORT='5432'
 FS_INSTALLED_PATH='/usr/local/freeswitch'
@@ -219,7 +222,8 @@ func_install_dependencies(){
 
             #Install Node.js & NPM
             apt-get -y install nodejs-legacy
-            curl --insecure https://www.npmjs.org/install.sh | bash
+            wget https://www.npmjs.org/install.sh --no-check-certificate
+            bash install.sh
 
             # cd /usr/src/ ; git clone https://github.com/joyent/node.git
             # # 'git tag' shows all available versions: select the latest stable.
@@ -405,15 +409,10 @@ func_install_source(){
     cd /usr/src/
     rm -rf newfies-dialer
     mkdir /var/log/newfies
-
-    git clone git://github.com/Star2Billing/newfies-dialer.git
+    wget http://www.kazoo.com.cn/newfies-dialer.tar.gz
+    tar -xvzf newfies-dialer.tar.gz
+    #git clone git://github.com/Star2Billing/newfies-dialer.git
     cd newfies-dialer
-
-    #Install branch develop / callcenter
-    if echo $BRANCH | grep -i "^develop" > /dev/null ; then
-        git checkout -b develop --track origin/develop
-    fi
-
     #Copy files
     cp -r /usr/src/newfies-dialer/newfies $INSTALL_DIR
     cp -r /usr/src/newfies-dialer/lua $LUA_DIR
